@@ -6,6 +6,7 @@ from boggle import BoggleGame
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "this-is-secret"
 
+
 # The boggle games created, keyed by game id
 games = {}
 
@@ -37,3 +38,32 @@ def new_game():
 
     return jsonify(game_data)
 
+
+@app.post("/api/score-word")
+def score_word():
+    """Recieves a word and determines whether that word is valid, not a word,
+      or not on the game board
+
+      Recieves: JSON of {
+        gameId: "...uuid-of-game...",
+        word: "str"
+      }
+
+      Returns: JSON of {
+        result: "ok" or "not-word" or "not-on-board"
+      }
+      """
+
+    word = request.json.get('word')
+    game_id = request.json.get('gameId')
+    curr_game = games.get(game_id)
+    response = {}
+
+    if not curr_game.is_word_in_word_list(word):
+        response['result'] = "not-word"
+    elif not curr_game.check_word_on_board(word):
+        response['result'] = "not-on-board"
+    else:
+        response['result'] = 'ok'
+
+    return jsonify(response)
