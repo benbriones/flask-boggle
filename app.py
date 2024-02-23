@@ -31,5 +31,9 @@ def new_game():
     game_id = str(uuid4())
     game = BoggleGame()
     games[game_id] = game
+    board = game.board
 
-    return None   # FIXME
+    game_data = {"gameId": game_id, "board": board}
+
+    return jsonify(game_data)
+
