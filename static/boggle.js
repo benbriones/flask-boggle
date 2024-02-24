@@ -25,6 +25,7 @@ async function start() {
 
 /** Display board */
 
+/**Fills board with random letters */
 function displayBoard(board) {
   $table.empty();
 
@@ -41,7 +42,11 @@ function displayBoard(board) {
   $table.append($tBody);
 }
 
+
+/**Tests if submitted word is valid and on board, if it is it appends word to
+ * top left list, if not it shows a message in top right */
 async function handleFormSubmit(evt) {
+
   evt.preventDefault()
   const word = $wordInput.val();
   console.log("word is =", word);
@@ -53,9 +58,18 @@ async function handleFormSubmit(evt) {
   });
 
   const data = await response.json();
-  console.log("data", data)
-  console.log("data.result=", data.result)
-  // $message.html(data.result);
+  handleWord(word, data.result)
+}
+
+/**Takes a word and message, if word is valid it appends to top right, if not
+ * message is displayed in top left */
+function handleWord(word, msg) {
+  if (msg === "ok") {
+    $playedWords.append(`<li> ${word} </li>`);
+    $message.html("");
+  } else {
+    $message.html(msg);
+  }
 }
 
 $form.on('submit', handleFormSubmit);
