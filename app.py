@@ -54,11 +54,11 @@ def score_word():
       }
       """
 
-    word = request.json.get('word')
+    word = request.json.get('word').upper()
     game_id = request.json.get('gameId')
     curr_game = games.get(game_id)
     response = {}
-
+    print(f"""*******************************************{word}""")
     if not curr_game.is_word_in_word_list(word):
         response['result'] = "not-word"
     elif not curr_game.check_word_on_board(word):
